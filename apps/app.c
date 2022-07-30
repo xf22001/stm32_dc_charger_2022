@@ -6,7 +6,7 @@
  *   文件名称：app.c
  *   创 建 者：肖飞
  *   创建日期：2019年10月11日 星期五 16时54分03秒
- *   修改日期：2022年05月03日 星期二 15时02分52秒
+ *   修改日期：2022年07月08日 星期五 08时38分57秒
  *   描    述：
  *
  *================================================================*/
@@ -14,7 +14,7 @@
 
 #include <string.h>
 
-//#include "iwdg.h"
+#include "iwdg.h"
 
 #include "os_utils.h"
 #include "config_layout.h"
@@ -421,10 +421,10 @@ void app(void const *argument)
 	dtu_init();
 #endif
 
+	update_network_ip_config(app_info);
+
 	poll_loop = get_or_alloc_poll_loop(0);
 	OS_ASSERT(poll_loop != NULL);
-
-	update_network_ip_config(app_info);
 
 	probe_broadcast_add_poll_loop(poll_loop);
 	probe_server_add_poll_loop(poll_loop);
@@ -542,7 +542,7 @@ static void blink_work_led()
 
 void idle(void const *argument)
 {
-	//MX_IWDG_Init();
+	MX_IWDG_Init();
 	//HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);
 	HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
 	HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2);
@@ -551,7 +551,7 @@ void idle(void const *argument)
 	__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, 500);
 
 	while(1) {
-		//HAL_IWDG_Refresh(&hiwdg);
+		HAL_IWDG_Refresh(&hiwdg);
 		update_work_led();
 		blink_work_led();
 		osDelay(10);

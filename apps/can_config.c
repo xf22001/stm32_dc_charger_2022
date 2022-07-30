@@ -6,11 +6,13 @@
  *   文件名称：can_config.c
  *   创 建 者：肖飞
  *   创建日期：2020年04月17日 星期五 09时16分53秒
- *   修改日期：2022年03月23日 星期三 11时21分51秒
+ *   修改日期：2022年07月30日 星期六 10时06分47秒
  *   描    述：
  *
  *================================================================*/
 #include "can_config.h"
+
+#include "main.h"
 #include "os_utils.h"
 #include "mcp2518/mcp25xxfd_driver/canfdspi/drv_canfdspi_defines.h"
 
@@ -61,8 +63,8 @@ can_config_t can_config_can3 = {
 	.filter_mask_ext = 0,
 
 	.tx_fifo = CAN_FIFO_CH2,
-	.spi_cs_port = GPIOG,
-	.spi_cs_pin = GPIO_PIN_15,
+	.spi_cs_port = cancs_GPIO_Port,
+	.spi_cs_pin = cancs_Pin,
 };
 #endif
 

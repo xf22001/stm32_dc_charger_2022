@@ -6,11 +6,14 @@
  *   文件名称：channels_config.c
  *   创 建 者：肖飞
  *   创建日期：2021年01月18日 星期一 09时26分44秒
- *   修改日期：2022年03月10日 星期四 10时06分48秒
+ *   修改日期：2022年07月30日 星期六 17时29分50秒
  *   描    述：
  *
  *================================================================*/
 #include "channels_config.h"
+
+#include "main.h"
+
 #include "os_utils.h"
 #include "power_modules.h"
 
@@ -137,159 +140,141 @@ char *get_power_manager_type_des(power_manager_type_t type)
 static energy_meter_config_item_t energy_meter_config_item_0_0 = {
 	.type = ENERGY_METER_TYPE_DC,
 	.huart = &huart4,
-	.led_gpio = GPIOE,
-	.led_pin = GPIO_PIN_13,
+	//.led_gpio = ,
+	//.led_pin = ,
 };
 
 static energy_meter_config_item_t *energy_meter_config_item_0_sz[] = {
 	&energy_meter_config_item_0_0,
 };
 
-function_board_config_item_t function_board_config_item_0_0 = {
-	.type = FUNCTION_BOARD_TYPE_V5,
-	.charge_voltage_adc = &hadc3,
-	.charge_voltage_adc_rank = 2,
-	.battery_voltage_adc = &hadc3,
-	.battery_voltage_adc_rank = 10,
-	.insulation_voltage_adc = &hadc3,
-	.insulation_voltage_adc_rank = 3,
-	.insulation_k1_gpio = GPIOD,
-	.insulation_k1_pin = GPIO_PIN_15,
-	.insulation_k3_gpio = GPIOG,
-	.insulation_k3_pin = GPIO_PIN_3,
+static function_board_config_item_t function_board_config_item_0_0 = {
+	.type = FUNCTION_BOARD_TYPE_485,
+	.huart = &huart3,
 };
 
-function_board_config_item_t *function_board_0_sz[] = {
+static function_board_config_item_t *function_board_config_item_0_sz[] = {
 	&function_board_config_item_0_0,
-};
-
-function_board_config_item_t function_board_config_item_1_0 = {
-	.type = FUNCTION_BOARD_TYPE_V5,
-	.charge_voltage_adc = &hadc3,
-	.charge_voltage_adc_rank = 6,
-	.battery_voltage_adc = &hadc3,
-	.battery_voltage_adc_rank = 7,
-	.insulation_voltage_adc = &hadc3,
-	.insulation_voltage_adc_rank = 4,
-	.insulation_k1_gpio = GPIOG,
-	.insulation_k1_pin = GPIO_PIN_6,
-	.insulation_k3_gpio = GPIOG,
-	.insulation_k3_pin = GPIO_PIN_7,
-};
-
-function_board_config_item_t *function_board_1_sz[] = {
-	&function_board_config_item_1_0,
 };
 
 static channel_config_t channel0_config = {
 	.channel_type = CHANNEL_TYPE_NATIVE,
 	.charger_config = {
 		.charger_type = CHANNEL_CHARGER_BMS_TYPE_GB,
-		.output_relay_gpio = GPIOD,
-		.output_relay_pin = GPIO_PIN_11,
-		.output_relay_gpio_fb = GPIOG,
-		.output_relay_pin_fb = GPIO_PIN_4,
+		.output_relay_gpio = rey3_GPIO_Port,
+		.output_relay_pin = rey3_Pin,
+		//.output_relay_gpio_fb = ,
+		//.output_relay_pin_fb = ,
 		.hcan_bms = &hcan2,
-		.relay_charger_lock_p_gpio = GPIOD,
-		.relay_charger_lock_p_pin = GPIO_PIN_13,
-		.relay_charger_lock_n_gpio = GPIOD,
-		.relay_charger_lock_n_pin = GPIO_PIN_14,
-		.charger_lock_state_gpio = GPIOG,
-		.charger_lock_state_pin = GPIO_PIN_5,
-		.charger_auxiliary_power_choose_gpio = GPIOI,
-		.charger_auxiliary_power_choose_pin = GPIO_PIN_9,
-		.charger_auxiliary_power_onoff_gpio = GPIOD,
-		.charger_auxiliary_power_onoff_pin = GPIO_PIN_12,
+		.relay_charger_lock_p_gpio = lock_a_GPIO_Port,
+		.relay_charger_lock_p_pin = lock_a_Pin,
+		.relay_charger_lock_n_gpio = unlock_b_Pin,
+		.relay_charger_lock_n_pin = unlock_b_GPIO_Port,
+		.charger_lock_state_gpio = bk_a_GPIO_Port,
+		.charger_lock_state_pin = bk_a_Pin,
+		.charger_auxiliary_power_choose_gpio = rey4_GPIO_Port,
+		.charger_auxiliary_power_choose_pin = rey4_Pin,
+		.charger_auxiliary_power_onoff_gpio = rey1_GPIO_Port,//rey2_GPIO_Port
+		.charger_auxiliary_power_onoff_pin = rey1_Pin,//rey2_Pin
 	},
 	.energy_meter_config = {
 		.default_type = ENERGY_METER_TYPE_DC,
-		.request_addr = 1,
+		.request_addr = 0,
 		.size = ARRAY_SIZE(energy_meter_config_item_0_sz),
 		.items = energy_meter_config_item_0_sz,
 	},
 	.function_board_config = {
-		.default_type = FUNCTION_BOARD_TYPE_V5,
-		.size = ARRAY_SIZE(function_board_0_sz),
-		.items = function_board_0_sz,
+		.default_type = FUNCTION_BOARD_TYPE_485,
+		.size = ARRAY_SIZE(function_board_config_item_0_sz),
+		.items = function_board_config_item_0_sz,
 	},
 	.charger_temperature_p_adc = &hadc3,
-	.charger_temperature_p_adc_rank = 5,
+	.charger_temperature_p_adc_rank = 1,
 	.charger_temperature_n_adc = &hadc3,
-	.charger_temperature_n_adc_rank = 9,
+	.charger_temperature_n_adc_rank = 2,
 	.charger_temperature_type = TEMPERATURE_TYPE_PT_1000,
-	.cp_ad_adc = &hadc1,
-	.cp_ad_adc_rank = 0,
-	.adhe_p_gpio = GPIOG,
-	.adhe_p_pin = GPIO_PIN_4,
-	.adhe_n_gpio = GPIOG,
-	.adhe_n_pin = GPIO_PIN_4,
-	//.fault_port = GPIOI,
-	//.fault_pin = GPIO_PIN_8,
-	.led_charge_port = GPIOF,
-	.led_charge_pin = GPIO_PIN_1,
-	.led_full_port = GPIOE,
-	.led_full_pin = GPIO_PIN_5,
+	.cp_gpio = cc1_a_GPIO_Port,
+	.cp_pin = cc1_a_Pin,
+	//.adhe_p_gpio = ,
+	//.adhe_p_pin = ,
+	//.adhe_n_gpio = ,
+	//.adhe_n_pin = ,
+	.fault_port = rey7_GPIO_Port,
+	.fault_pin = rey7_Pin,
+	.led_charge_port = rey5_GPIO_Port,
+	.led_charge_pin = rey5_Pin,
+	.led_full_port = rey6_GPIO_Port,
+	.led_full_pin = rey6_Pin,
 };
 
 static energy_meter_config_item_t energy_meter_config_item_1_0 = {
 	.type = ENERGY_METER_TYPE_DC,
-	.huart = &huart3,
-	.led_gpio = GPIOE,
-	.led_pin = GPIO_PIN_14,
+	.huart = &huart4,
+	//.led_gpio = ,
+	//.led_pin = ,
 };
 
 static energy_meter_config_item_t *energy_meter_config_item_1_sz[] = {
 	&energy_meter_config_item_1_0,
 };
 
+static function_board_config_item_t function_board_config_item_1_0 = {
+	.type = FUNCTION_BOARD_TYPE_485,
+	.huart = &huart3,
+};
+
+static function_board_config_item_t *function_board_config_item_1_sz[] = {
+	&function_board_config_item_1_0,
+};
+
 static channel_config_t channel1_config = {
 	.channel_type = CHANNEL_TYPE_NATIVE,
 	.charger_config = {
 		.charger_type = CHANNEL_CHARGER_BMS_TYPE_GB,
-		.output_relay_gpio = GPIOG,
-		.output_relay_pin = GPIO_PIN_9,
-		.output_relay_gpio_fb = GPIOG,
-		.output_relay_pin_fb = GPIO_PIN_10,
+		.output_relay_gpio = rey10_GPIO_Port,
+		.output_relay_pin = rey10_Pin,
+		//.output_relay_gpio_fb = ,
+		//.output_relay_pin_fb = ,
 		.hcan_bms = &hspi3,
-		.relay_charger_lock_p_gpio = GPIOG,
-		.relay_charger_lock_p_pin = GPIO_PIN_12,
-		.relay_charger_lock_n_gpio = GPIOG,
-		.relay_charger_lock_n_pin = GPIO_PIN_13,
-		.charger_lock_state_gpio = GPIOG,
-		.charger_lock_state_pin = GPIO_PIN_14,
-		.charger_auxiliary_power_choose_gpio = GPIOI,
-		.charger_auxiliary_power_choose_pin = GPIO_PIN_10,
-		.charger_auxiliary_power_onoff_gpio = GPIOG,
-		.charger_auxiliary_power_onoff_pin = GPIO_PIN_11,
+		.relay_charger_lock_p_gpio = lock_b_GPIO_Port,
+		.relay_charger_lock_p_pin = lock_b_Pin,
+		.relay_charger_lock_n_gpio = unlock_b_GPIO_Port,
+		.relay_charger_lock_n_pin = unlock_b_Pin,
+		.charger_lock_state_gpio = bk_b_GPIO_Port,
+		.charger_lock_state_pin = bk_b_Pin,
+		.charger_auxiliary_power_choose_gpio = rey11_GPIO_Port,
+		.charger_auxiliary_power_choose_pin = rey11_Pin,
+		.charger_auxiliary_power_onoff_gpio = rey8_GPIO_Port,//rey9_GPIO_Port
+		.charger_auxiliary_power_onoff_pin = rey8_Pin,//rey9_Pin
 	},
 	.energy_meter_config = {
 		.default_type = ENERGY_METER_TYPE_DC,
-		.request_addr = 1,
+		.request_addr = 0,
 		.size = ARRAY_SIZE(energy_meter_config_item_1_sz),
 		.items = energy_meter_config_item_1_sz,
 	},
 	.function_board_config = {
-		.default_type = FUNCTION_BOARD_TYPE_V5,
-		.size = ARRAY_SIZE(function_board_1_sz),
-		.items = function_board_1_sz,
+		.default_type = FUNCTION_BOARD_TYPE_485,
+		.size = ARRAY_SIZE(function_board_config_item_1_sz),
+		.items = function_board_config_item_1_sz,
 	},
 	.charger_temperature_p_adc = &hadc3,
-	.charger_temperature_p_adc_rank = 1,
+	.charger_temperature_p_adc_rank = 3,
 	.charger_temperature_n_adc = &hadc3,
-	.charger_temperature_n_adc_rank = 0,
+	.charger_temperature_n_adc_rank = 4,
 	.charger_temperature_type = TEMPERATURE_TYPE_PT_1000,
-	.cp_ad_adc = &hadc1,
-	.cp_ad_adc_rank = 1,
-	.adhe_p_gpio = GPIOG,
-	.adhe_p_pin = GPIO_PIN_10,
-	.adhe_n_gpio = GPIOG,
-	.adhe_n_pin = GPIO_PIN_10,
-	//.fault_port = GPIOF,
-	//.fault_pin = GPIO_PIN_0,
-	.led_charge_port = GPIOI,
-	.led_charge_pin = GPIO_PIN_11,
-	.led_full_port = GPIOE,
-	.led_full_pin = GPIO_PIN_6,
+	.cp_gpio = cc1_b_GPIO_Port,
+	.cp_pin = cc1_b_Pin,
+	//.adhe_p_gpio = ,
+	//.adhe_p_pin = ,
+	//.adhe_n_gpio = ,
+	//.adhe_n_pin = ,
+	.fault_port = rey14_GPIO_Port,
+	.fault_pin = rey14_Pin,
+	.led_charge_port = rey12_GPIO_Port,
+	.led_charge_pin = rey12_Pin,
+	.led_full_port = rey13_GPIO_Port,
+	.led_full_pin = rey13_Pin,
 };
 
 static channel_config_t *channel_config_sz[] = {

@@ -1,7 +1,7 @@
 /* USER CODE BEGIN Header */
 /**
   ******************************************************************************
-  * @file           : Target/usbh_conf.c
+  * @file           : usbh_conf.c
   * @version        : v1.0_Cube
   * @brief          : This file implements the board support package for the USB host library
   ******************************************************************************

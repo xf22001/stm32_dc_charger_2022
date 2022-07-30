@@ -1,7 +1,7 @@
 /* USER CODE BEGIN Header */
 /**
   ******************************************************************************
-  * @file           : Target/usbh_conf.h
+  * @file           : usbh_conf.h
   * @version        : v1.0_Cube
   * @brief          : Header for usbh_conf.c file.
   ******************************************************************************
