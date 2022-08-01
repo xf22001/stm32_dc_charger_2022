@@ -1,19 +1,18 @@
 
 
 /*================================================================
- *   
- *   
+ *
+ *
  *   文件名称：function_board_handler_custom.c
  *   创 建 者：肖飞
  *   创建日期：2022年08月01日 星期一 11时35分01秒
- *   修改日期：2022年08月01日 星期一 11时39分21秒
+ *   修改日期：2022年08月01日 星期一 15时38分46秒
  *   描    述：
  *
  *================================================================*/
 #include "function_board_handler_custom.h"
 #include "uart_data_task.h"
 #include "hw_adc.h"
-#include "ntc_temperature.h"
 
 #include "log.h"
 
@@ -311,8 +310,8 @@ static int telemetering(function_board_info_t *function_board_info)
 	channel_info->function_board_battery_voltage = function_board_telemetering_data->battery_voltage * 4.44 * 10;
 	//channel_info->charger_voltage = function_board_telemetering_data->charger_voltage_dec * 10;
 	channel_info->insulation_resistor = function_board_telemetering_data->insulation_resistor;
-	channel_info->dc_p_temperature = function_board_telemetering_data->dc_p_temperature;
-	channel_info->dc_n_temperature = function_board_telemetering_data->dc_n_temperature;
+	//channel_info->temperature_p = function_board_telemetering_data->dc_p_temperature - 20;
+	//channel_info->temperature_n = function_board_telemetering_data->dc_n_temperature - 20;
 
 	//debug("channel %d function_board_charger_voltage:%lu", channel_info->channel_id, channel_info->function_board_charger_voltage);
 	//debug("channel %d function_board_battery_voltage:%lu", channel_info->channel_id, channel_info->function_board_battery_voltage);
@@ -398,7 +397,7 @@ static void handle_charger_temperature(channel_info_t *channel_info)
 		OS_ASSERT(adc_info != NULL);
 
 		channel_info->temperature_p_ad = get_adc_value(adc_info, channel_config->charger_temperature_p_adc_rank);
-		channel_info->temperature_p = get_ntc_temperature(10000, channel_info->temperature_p_ad, 4095);
+		channel_info->temperature_p = adc_value_helper(ADC_VALUE_TYPE_TEMPERATURE_P, channel_info->temperature_p_ad);
 	}
 
 	if(channel_config->charger_temperature_n_adc != NULL) {
@@ -406,7 +405,7 @@ static void handle_charger_temperature(channel_info_t *channel_info)
 		OS_ASSERT(adc_info != NULL);
 
 		channel_info->temperature_n_ad = get_adc_value(adc_info, channel_config->charger_temperature_n_adc_rank);
-		channel_info->temperature_n = get_ntc_temperature(10000, channel_info->temperature_n_ad, 4095);
+		channel_info->temperature_n = adc_value_helper(ADC_VALUE_TYPE_TEMPERATURE_N, channel_info->temperature_n_ad);
 	}
 }
 

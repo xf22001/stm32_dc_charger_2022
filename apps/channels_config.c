@@ -6,7 +6,7 @@
  *   文件名称：channels_config.c
  *   创 建 者：肖飞
  *   创建日期：2021年01月18日 星期一 09时26分44秒
- *   修改日期：2022年07月30日 星期六 17时29分50秒
+ *   修改日期：2022年08月01日 星期一 15时38分21秒
  *   描    述：
  *
  *================================================================*/
@@ -168,8 +168,8 @@ static channel_config_t channel0_config = {
 		.hcan_bms = &hcan2,
 		.relay_charger_lock_p_gpio = lock_a_GPIO_Port,
 		.relay_charger_lock_p_pin = lock_a_Pin,
-		.relay_charger_lock_n_gpio = unlock_b_Pin,
-		.relay_charger_lock_n_pin = unlock_b_GPIO_Port,
+		.relay_charger_lock_n_gpio = unlock_a_GPIO_Port,
+		.relay_charger_lock_n_pin = unlock_a_Pin,
 		.charger_lock_state_gpio = bk_a_GPIO_Port,
 		.charger_lock_state_pin = bk_a_Pin,
 		.charger_auxiliary_power_choose_gpio = rey4_GPIO_Port,
@@ -466,6 +466,12 @@ int adc_value_helper(adc_value_type_t adc_value_type, uint16_t adc_value)
 	int value = 0;
 
 	switch(adc_value_type) {
+		case ADC_VALUE_TYPE_TEMPERATURE_P:
+		case ADC_VALUE_TYPE_TEMPERATURE_N: {
+			value = 260 * (adc_value / 1241 / 2 - 1);
+		}
+		break;
+
 		default: {
 			app_panic();
 		}
