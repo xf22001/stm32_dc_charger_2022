@@ -6,7 +6,7 @@
 #   文件名称：user.mk
 #   创 建 者：肖飞
 #   创建日期：2019年10月25日 星期五 13时04分38秒
-#   修改日期：2022年05月03日 星期二 15时10分11秒
+#   修改日期：2022年08月01日 星期一 11时36分48秒
 #   描    述：
 #
 #================================================================
@@ -66,6 +66,7 @@ USER_C_SOURCES += apps/channels_addr_handler.c
 USER_C_SOURCES += apps/display_cache.c
 USER_C_SOURCES += apps/channels_notify_voice.c
 USER_C_SOURCES += apps/power_manager_group_policy_config.c
+USER_C_SOURCES += apps/function_board_handler_custom.c
 ifneq ($(call ifdef_any_of,SAL_WIZNET),)
 USER_C_SOURCES += apps/wiznet_spi.c
 endif

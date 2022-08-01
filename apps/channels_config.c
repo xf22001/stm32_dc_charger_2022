@@ -460,3 +460,17 @@ proxy_channel_item_t *get_proxy_channel_item_by_channel_id(proxy_channel_info_t 
 
 	return item;
 }
+
+int adc_value_helper(adc_value_type_t adc_value_type, uint16_t adc_value)
+{
+	int value = 0;
+
+	switch(adc_value_type) {
+		default: {
+			app_panic();
+		}
+		break;
+	}
+
+	return value;
+}
