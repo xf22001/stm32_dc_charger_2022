@@ -6,7 +6,7 @@
  *   文件名称：app.c
  *   创 建 者：肖飞
  *   创建日期：2019年10月11日 星期五 16时54分03秒
- *   修改日期：2022年07月08日 星期五 08时38分57秒
+ *   修改日期：2022年08月02日 星期二 08时47分34秒
  *   描    述：
  *
  *================================================================*/
@@ -537,7 +537,7 @@ static void blink_work_led()
 
 	ledcpu_stamp = ticks;
 
-	HAL_GPIO_TogglePin(GPIOE, GPIO_PIN_12);
+	HAL_GPIO_TogglePin(ledcpu_GPIO_Port, ledcpu_Pin);
 }
 
 void idle(void const *argument)

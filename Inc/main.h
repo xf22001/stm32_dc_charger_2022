@@ -223,8 +223,8 @@ void Error_Handler(void);
 #define canint1_GPIO_Port GPIOB
 #define led1_Pin GPIO_PIN_8
 #define led1_GPIO_Port GPIOB
-#define led1B9_Pin GPIO_PIN_9
-#define led1B9_GPIO_Port GPIOB
+#define led2_Pin GPIO_PIN_9
+#define led2_GPIO_Port GPIOB
 #define out1_Pin GPIO_PIN_0
 #define out1_GPIO_Port GPIOE
 #define out2_Pin GPIO_PIN_1

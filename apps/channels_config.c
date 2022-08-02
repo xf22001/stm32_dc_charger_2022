@@ -6,7 +6,7 @@
  *   文件名称：channels_config.c
  *   创 建 者：肖飞
  *   创建日期：2021年01月18日 星期一 09时26分44秒
- *   修改日期：2022年08月01日 星期一 15时38分21秒
+ *   修改日期：2022年08月02日 星期二 08时45分23秒
  *   描    述：
  *
  *================================================================*/
@@ -192,7 +192,6 @@ static channel_config_t channel0_config = {
 	.charger_temperature_p_adc_rank = 1,
 	.charger_temperature_n_adc = &hadc3,
 	.charger_temperature_n_adc_rank = 2,
-	.charger_temperature_type = TEMPERATURE_TYPE_PT_1000,
 	.cp_gpio = cc1_a_GPIO_Port,
 	.cp_pin = cc1_a_Pin,
 	//.adhe_p_gpio = ,
@@ -262,7 +261,6 @@ static channel_config_t channel1_config = {
 	.charger_temperature_p_adc_rank = 3,
 	.charger_temperature_n_adc = &hadc3,
 	.charger_temperature_n_adc_rank = 4,
-	.charger_temperature_type = TEMPERATURE_TYPE_PT_1000,
 	.cp_gpio = cc1_b_GPIO_Port,
 	.cp_pin = cc1_b_Pin,
 	//.adhe_p_gpio = ,
@@ -322,7 +320,6 @@ static channels_config_t channels_config_0 = {
 	},
 	.board_temperature_adc = &hadc3,
 	.board_temperature_adc_rank = 8,
-	.board_temperature_type = TEMPERATURE_TYPE_NTC_10000_REF_ADC,
 	.force_stop_port = GPIOF,
 	.force_stop_pin = GPIO_PIN_2,
 	.force_stop_normal_state = GPIO_PIN_RESET,
@@ -466,6 +463,11 @@ int adc_value_helper(adc_value_type_t adc_value_type, uint16_t adc_value)
 	int value = 0;
 
 	switch(adc_value_type) {
+		case ADC_VALUE_TYPE_BOARD_TEMPERATURE: {
+			value = get_ntc_temperature(10000, adc_value, 4095);
+		}
+		break;
+
 		case ADC_VALUE_TYPE_TEMPERATURE_P:
 		case ADC_VALUE_TYPE_TEMPERATURE_N: {
 			value = 260 * (adc_value / 1241 / 2 - 1);
