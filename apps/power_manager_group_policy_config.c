@@ -45,16 +45,22 @@ relay_info_t relay_info = {
 	.power_manager_group_relay_info = power_manager_relay_info_sz,
 };
 
+static uint8_t power_module_group_id_0_0[] = {0};
+
 static power_module_group_bind_node_t power_module_group_bind_node_0_0 = {
 	.id = 0,
 	.channel_id = 0,
-	.power_module_group_id = {0},
+	.power_module_group_id_sz = power_module_group_id_0_0,
+	.power_module_group_id_size = ARRAY_SIZE(power_module_group_id_0_0),
 };
+
+static uint8_t power_module_group_id_0_1[] = {1};
 
 static power_module_group_bind_node_t power_module_group_bind_node_0_1 = {
 	.id = 1,
 	.channel_id = 1,
-	.power_module_group_id = {1},
+	.power_module_group_id_sz = power_module_group_id_0_1,
+	.power_module_group_id_size = ARRAY_SIZE(power_module_group_id_0_1),
 };
 
 static power_module_group_bind_node_t *power_module_group_bind_node_sz[] = {
@@ -142,7 +148,7 @@ void power_manager_restore_config(channels_info_t *channels_info)
 	for(i = 0; i < power_manager_settings->power_manager_group_number; i++) {
 		power_manager_group_settings_t *power_manager_group_settings = &power_manager_settings->power_manager_group_settings[i];
 
-		power_manager_group_settings->channel_number = 4;
+		power_manager_group_settings->channel_number = 2;
 		power_manager_group_settings->relay_board_number_per_channel = 0;
 
 		for(j = 0; j < power_manager_group_settings->relay_board_number_per_channel; j++) {
@@ -151,8 +157,6 @@ void power_manager_restore_config(channels_info_t *channels_info)
 
 		power_manager_group_settings->power_module_group_number = 2;
 
-		channels_info->channel_number += power_manager_group_settings->channel_number;
-
 		for(j = 0; j < power_manager_group_settings->power_module_group_number; j++) {
 			power_module_group_settings_t *power_module_group_settings = &power_manager_group_settings->power_module_group_settings[j];
 			power_module_group_settings->power_module_number = 3;
@@ -160,3 +164,30 @@ void power_manager_restore_config(channels_info_t *channels_info)
 	}
 }
 
+void channel_info_reset_default_config(channel_info_t *channel_info)
+{
+	channel_config_t *channel_config = channel_info->channel_config;
+	channel_settings_t *channel_settings = &channel_info->channel_settings;
+
+	memset(channel_settings, 0, sizeof(channel_settings_t));
+
+	channel_settings->channel_type = channel_config->channel_type;
+	channel_settings->charger_settings.charger_type = channel_config->charger_config.charger_type;
+	channel_settings->energy_meter_settings.type = channel_config->energy_meter_config.default_type;
+	channel_settings->energy_meter_settings.request_addr = channel_config->energy_meter_config.request_addr;
+	channel_settings->energy_meter_settings.slot = channel_config->energy_meter_config.slot;
+	channel_settings->energy_meter_settings.energy_accuracy = channel_config->energy_meter_config.energy_accuracy;
+	channel_settings->energy_meter_settings.voltage_accuracy = channel_config->energy_meter_config.voltage_accuracy;
+	channel_settings->energy_meter_settings.curent_accuracy = channel_config->energy_meter_config.curent_accuracy;
+	channel_settings->function_board_type = channel_config->function_board_config.default_type;
+
+	channel_settings->max_output_power = 6000000;
+
+	channel_settings->max_output_voltage = 7500;
+	channel_settings->min_output_voltage = 2000;
+	channel_settings->max_output_current = 5000;
+	channel_settings->min_output_current = 3;
+
+	channel_settings->multi_charge_settings.group = 0;
+	channel_settings->multi_charge_settings.id = channel_info->channel_id;
+}

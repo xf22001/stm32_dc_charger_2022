@@ -53,11 +53,13 @@ typedef struct {
 
 typedef struct {
 	mechine_info_t mechine_info;
+	storage_info_t *storage_info;
+#if !defined(DISABLE_DISPLAY)
 	uint8_t mechine_info_invalid;
 	display_cache_app_t display_cache_app;
-	storage_info_t *storage_info;
 	callback_item_t display_data_invalid_callback_item;
 	callback_item_t display_data_changed_callback_item;
+#endif
 } app_info_t;
 
 typedef enum {
@@ -75,8 +77,10 @@ int app_load_config(void);
 int app_save_config(void);
 void app_init(void);
 void send_app_event(app_event_t event, uint32_t timeout);
+#if !defined(DISABLE_DISPLAY)
 void load_app_display_cache(app_info_t *app_info);
 void sync_app_display_cache(app_info_t *app_info);
+#endif
 void update_network_ip_config(app_info_t *app_info);
 void app_set_reset_config(void);
 uint8_t app_get_reset_config(void);

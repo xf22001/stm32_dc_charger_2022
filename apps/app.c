@@ -105,6 +105,7 @@ void send_app_event(app_event_t event, uint32_t timeout)
 	signal_send(app_event, event, timeout);
 }
 
+#if !defined(DISABLE_DISPLAY)
 static void app_mechine_info_invalid(void *fn_ctx, void *chain_ctx)
 {
 	app_info_t *app_info = (app_info_t *)fn_ctx;
@@ -142,6 +143,7 @@ static void app_mechine_info_changed(void *fn_ctx, void *chain_ctx)
 		app_save_config();
 	}
 }
+#endif
 
 void update_network_ip_config(app_info_t *app_info)
 {
@@ -365,7 +367,9 @@ void app(void const *argument)
 {
 	poll_loop_t *poll_loop;
 	channels_info_t *channels_info = NULL;
+#if !defined(DISABLE_DISPLAY)
 	display_info_t *display_info = NULL;
+#endif
 	int ret;
 	//storage_info_t *cache_storage_info;
 
@@ -450,6 +454,7 @@ void app(void const *argument)
 	//ftp_client_add_poll_loop(poll_loop);
 	ntp_client_add_poll_loop(poll_loop);
 
+#if !defined(DISABLE_DISPLAY)
 	display_info = (display_info_t *)channels_info->display_info;
 	OS_ASSERT(display_info != NULL);
 
@@ -462,10 +467,13 @@ void app(void const *argument)
 		app_info->display_data_changed_callback_item.fn_ctx = app_info;
 		OS_ASSERT(register_callback(display_info->modbus_slave_info->data_changed_chain, &app_info->display_data_changed_callback_item) == 0);
 	}
+#endif
 
+#if !defined(DISABLE_VOICE)
 	if(init_channels_notify_voice(channels_info) != 0) {
 		debug("");
 	}
+#endif
 
 	while(1) {
 		uint32_t event;

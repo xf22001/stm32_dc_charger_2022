@@ -347,6 +347,12 @@ void sync_channels_display_cache(channels_info_t *channels_info)
 		channels_info->channels_settings_invalid = 1;
 	}
 
+	if(channels_info->display_cache_channels.withholding_sync != 0) {
+		channels_info->display_cache_channels.withholding_sync = 0;
+		channels_settings->withholding = get_u32_from_u16_01(channels_info->display_cache_channels.withholding_l, channels_info->display_cache_channels.withholding_h);
+		channels_info->channels_settings_invalid = 1;
+	}
+
 	if(channels_info->display_cache_channels.record_sync == 1) {
 		channel_record_task_info_t *channel_record_task_info = get_or_alloc_channel_record_task_info(0);
 
@@ -354,8 +360,10 @@ void sync_channels_display_cache(channels_info_t *channels_info)
 
 		if(channels_info->display_cache_channels.record_load_cmd == 1) {
 			struct tm tm = {0};
-			uint8_t year_h = get_u8_l_from_u16(channels_info->display_cache_channels.record_dt_cache.year);
-			uint8_t year_l = get_u8_h_from_u16(channels_info->display_cache_channels.record_dt_cache.year);
+			uint8_t year_l = get_u8_l_from_u16(channels_info->display_cache_channels.record_dt_cache.year);
+			uint8_t year_h = get_u8_h_from_u16(channels_info->display_cache_channels.record_dt_cache.year);
+
+			channels_info->display_cache_channels.record_load_cmd = 0;	
 
 			tm.tm_year = get_u16_from_bcd_b01(year_l, year_h) - 1900;
 			tm.tm_mon = get_u8_from_bcd(channels_info->display_cache_channels.record_dt_cache.mon) - 1;
@@ -363,8 +371,6 @@ void sync_channels_display_cache(channels_info_t *channels_info)
 			channel_record_task_info->page_load_time = mktime(&tm);
 
 			channel_record_item_page_load_location(channel_record_task_info);
-		} else {
-			channel_record_item_page_load_current(channel_record_task_info);
 		}
 	}
 
@@ -483,7 +489,7 @@ void sync_channel_display_cache(channel_info_t *channel_info)
 				break;
 			}
 		} else {//关机
-			channel_info->channel_event_stop.stop_reason = CHANNEL_RECORD_ITEM_STOP_REASON_MANUAL;
+			channel_info->channel_event_stop.stop_reason = channel_record_item_stop_reason(MANUAL);
 			type = CHANNEL_EVENT_TYPE_STOP_CHANNEL;
 		}
 

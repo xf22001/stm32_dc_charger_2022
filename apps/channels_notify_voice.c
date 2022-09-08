@@ -61,7 +61,7 @@ static void channels_notify_voice(void *fn_ctx, void *chain_ctx)
 		case CHANNELS_NOTIFY_CHANNEL_STATE_CHANGE: {
 			channel_info_t *channel_info = (channel_info_t *)channels_notify_ctx->ctx;
 
-			switch(channel_info->request_state) {
+			switch(channel_info->state) {
 				case CHANNEL_STATE_IDLE: {
 					request_voice(voice_info, VOICE_DATA_WELCOM_NEXT_VISIT);
 				}
